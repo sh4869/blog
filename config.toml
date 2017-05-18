@@ -1,0 +1,16 @@
+baseurl = "http://sh4869.net/daily_bread/"
+languageCode = "ja"
+title = "Daily Bread"
+author = "sh4869"
+copyright = "sh4869 All rights reserved."
+googleanalytics = "UA-12345678-9"
+theme = "hugo-zen"
+
+[permalinks]
+  post = "/post/:year/:month/:filename"
+
+[params]
+  logo      = "/images/icon.png"
+  twitter   = "https://twitter.com/sh4869sh"
+  github    = "https://github.com/sh4869"
+  email     = "nobuk4869@gmail.com"
