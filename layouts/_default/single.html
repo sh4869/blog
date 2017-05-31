@@ -8,11 +8,13 @@
 				{{ .Date.Format "January 02, 2006" }}
 			</time>
 			<div class="tag">
-				{{ range .Params.tags }}
-					<a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
-					 
-				{{ end }}
-				</div>
+				<p>
+					Tag:
+					{{ range .Params.tags }}
+						<a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+					{{ end }}
+				</p>
+			</div>
 		</span>
 		<section itemprop="entry-text">
 			{{ .Content }}

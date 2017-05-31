@@ -1,4 +1,5 @@
 +++
+categories = "daily"
 date = "2017-05-18T18:53:13+09:00"
 slug = "kore"
 tags = ["雑記",""]
