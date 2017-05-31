@@ -5,6 +5,7 @@ author = "sh4869"
 copyright = "sh4869 All rights reserved."
 googleanalytics = "UA-12345678-9"
 theme = "hugo-zen"
+rssuri = "feed.xml"
 
 [permalinks]
   post = "/post/:year/:month/:filename"
