@@ -5,13 +5,16 @@ author = "sh4869"
 copyright = "sh4869 All rights reserved."
 googleanalytics = "UA-12345678-9"
 theme = "hugo-zen"
-rssuri = "feed.xml"
 
 [permalinks]
   post = "/post/:year/:month/:filename"
 
 [params]
+  description = "That's our daily bread.  In other words, Heaven's blessing."
   logo      = "images/icon.png"
   twitter   = "https://twitter.com/sh4869sh"
   github    = "https://github.com/sh4869"
   email     = "nobuk4869@gmail.com"
+
+[outputFormats.RSS]
+baseName = "feed"

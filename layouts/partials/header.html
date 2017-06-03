@@ -21,5 +21,8 @@
 		<div class="header-logo">
 			<a href="{{ .Site.BaseURL }}"><img src="{{ .Site.BaseURL }}{{ .Site.Params.logo }}" width="60" height="60" alt="{{ .Site.Title }}"></a>
 		</div>
-		{{ if eq $isHomePage true }}<h1 class="site-title">{{ .Site.Title }}</h1>{{ end }}
+		{{ if eq $isHomePage true }}
+			<h1 class="site-title">{{ .Site.Title }}</h1>
+			<p class="site-description">{{ .Site.Params.description }}</p>
+		{{ end }}
 	</header>
