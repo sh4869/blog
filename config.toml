@@ -12,7 +12,7 @@ theme = "hugo_theme_beg"
   baseName = "feed"
 
 [params]
-disqusShortname = "sh4869"
+disqusShortname = "blog-sh4869-net"
 
 [[menu.main]]
 name = "sh4869.net"
