@@ -10,3 +10,22 @@ theme = "hugo_theme_beg"
 
 [outputFormats.RSS]
   baseName = "feed"
+
+[params]
+disqusShortname = "sh4869"
+
+[[menu.main]]
+name = "sh4869.net"
+url = "http://sh4869.net"
+weight = 1
+
+[[menu.main]]
+name = "Categories"
+url = "/categories/"
+weight = 2
+
+[[menu.main]]
+name = "Tags"
+url  = "/tags/"
+weight = 3
+
