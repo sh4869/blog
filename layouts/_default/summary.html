@@ -10,7 +10,7 @@
             {{ end }}
         {{ end }}
         {{ if .Params.Categories }}
-        <li><i class="fa fa-list-alt" aria-hidden="true"></i>
+        <li><i class="fa fa-folder" aria-hidden="true"></i>
           {{ range (.Params.Categories) }}
           <a href="{{ $.Site.BaseURL }}{{ "categories" | urlize }}/{{ . | urlize }}/">{{ . }}</a>
           {{ end }}
