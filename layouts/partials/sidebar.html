@@ -1,7 +1,7 @@
 <aside class="l-sidebar">
     <section class="panel panel-default">
         <div class="panel-heading">
-            <div class="panel-title">LATESTS</div>
+            <div class="panel-title">Latest Posts</div>
         </div>
         <div class="list-group">
             {{ range first 10 .Site.RegularPages }}
@@ -13,7 +13,7 @@
     {{ range $key, $value := .Site.Taxonomies }}
     <section class="panel panel-default">
         <div class="panel-heading">
-            <div class="panel-title">{{ $key | singularize | upper }}</div>
+            <div class="panel-title">{{ $key | singularize | title }}</div>
         </div>
         <div class="list-group">
             {{ range first 10 $value.ByCount }}
