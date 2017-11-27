@@ -13,6 +13,7 @@ theme = "hugo_theme_beg"
 
 [params]
 disqusShortname = "blog-sh4869-net"
+custom_css = ["css/custom.css"]
 
 [[menu.main]]
 name = "sh4869.net"

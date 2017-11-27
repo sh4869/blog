@@ -1,0 +1,9 @@
+/* Formatted  */
+.term {
+    display: block;
+    text-align: right;
+}
+
+.term p {
+    display: inline;
+}
