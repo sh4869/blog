@@ -1,6 +1,4 @@
 language: go
-go:
-  - 1.7
 branches:
   only:
   - master
@@ -9,8 +7,8 @@ before_install:
   - nvm use node
   - npm install -g firebase-tools
 install:
-  - go get -u -v igthub.com/spf13/hugo
+  - go get -u -v github.com/spf13/hugo
 script:
   - hugo
 after_success:
-  - firebase --token $FIREBSE_TOKEN --project sh4869-blog   deploy
+  - firebase --token $FIREBASE_TOKEN --project sh4869-blog deploy
