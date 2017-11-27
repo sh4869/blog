@@ -1,25 +1,27 @@
-<aside class="l-sidebar">
-    <section class="panel panel-default">
-        <div class="panel-heading">
-            <div class="panel-title">Latest Posts</div>
-        </div>
-        <div class="list-group">
-            {{ range first 10 .Site.RegularPages }}
-            <a href="{{ .Permalink }}" class="list-group-item">{{ .Title }}</a>
-            {{ end }}
-        </div>
-    </section>
-    
-    {{ range $key, $value := .Site.Taxonomies }}
-    <section class="panel panel-default">
-        <div class="panel-heading">
-            <div class="panel-title">{{ $key | singularize | title }}</div>
-        </div>
-        <div class="list-group">
-            {{ range first 10 $value.ByCount }}
-            <a href="{{ $.Site.BaseURL}}{{ $key }}/{{ .Name | urlize }}" class="list-group-item">{{ .Name }}</a>
-            {{ end }}
-        </div>
-    </section>
+<nav class="panel">
+    <p class="panel-heading">
+        Latest Posts
+    </p>
+    {{ range first 10 .Site.RegularPages }}
+    <a class="panel-block"  href="{{ .Permalink }}"><span class="panel-icon"><i class="fa fa-book"></i></span>{{ .Title }}</a>
     {{ end }}
-</aside>
+</nav>
+
+<nav class="panel">
+    <p class="panel-heading">
+        Category
+    </p>
+    {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
+    <a class="panel-block"  href="{{ $.Site.BaseURL}}{{ "categories" | urlize }}/{{ $name | urlize }}"><span class="panel-icon"><i class="fa fa-folder"></i></span>{{ $name }}</a>
+    {{ end }}
+</nav>
+
+<nav class="panel">
+    <p class="panel-heading">
+        Tag
+    </p>
+    {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+    <a class="panel-block"  href="{{ $.Site.BaseURL}}{{ "tags" | urlize }}/{{ $name | urlize }}"><span class="panel-icon"><i class="fa fa-tag"></i></span>{{ $name }}</a>
+    {{ end }}
+</nav>
+    
