@@ -5,9 +5,11 @@
   <div class="col-md-8">
 
     {{ if not .IsHome }}
-    <header class="page-header">
-      <h1>{{ .Data.Singular | title}}: {{ .Title }}</h1>
-    </header>
+      <header class="page-header">
+        <h1>{{ if .Data.Singular }} 
+          {{ .Data.Singular | title }}: 
+          {{ end }}{{ .Title }}</h1>
+      </header>
     {{ end }}
 
     <ul class="p-articles">
