@@ -20,46 +20,36 @@
     {{ if ne (getenv "HUGO_ENV") "DEV" }}
     {{ template "_internal/google_analytics.html" . }}
     {{ end }}
-
-    <header class="l-header">
-      <nav class="navbar navbar-default">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+    <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a href="/" class="navbar-item">
+            Laboratory of Scalet
+          </a>
+          <div class="navbar-burger burger" data-target="navbarMenu">
+              <span></span>
+              <span></span>
+              <span></span>
           </div>
-
-          {{ if ne (len .Site.Menus) 0 }}
-          <div id="navbar" class="collapse navbar-collapse">
-            {{ range .Site.Menus }}
-            <ul class="nav navbar-nav navbar-right">
-              {{ range . }}
+        </div>
+    
+      {{ if ne (len .Site.Menus) 0 }}
+        <div id="navbarMenu" class="navbar-menu">
+          {{ range .Site.Menus }}
+          <div class="navbar-end">
+            {{ range . }}
               {{ if .HasChildren }}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ .Name }} <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  {{ range .Children }}
-                  <li><a href="{{ .URL }}">{{ .Name }}</a></li>
-                  {{ end }}
-                </ul>
-              </li>
+              <!-- TODO -->
               {{ else }}
-              <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+                <a class="navbar-item" href="{{ .URL }}">
+                  {{ .Name }}
+                </a>
               {{ end }}
-              {{ end }}
-            </ul>
             {{ end }}
           </div>
           {{ end }}
-
         </div>
-      </nav>
-    </header>
+      {{ end }}
+    </nav>
 
     <main>
       <div class="container">
