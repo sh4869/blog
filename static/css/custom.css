@@ -7,3 +7,8 @@
 .term p {
     display: inline;
 }
+
+.tag-cloud p {
+    display: inline-block;
+    margin-right: 0.5em;
+}

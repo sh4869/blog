@@ -1,27 +1,36 @@
-<nav class="panel">
-    <p class="panel-heading">
-        Latest Posts
+<h1 class="subtitle">Latest Posts</h1>
+<div>
+    {{ range first 10 .Site.RegularPages }}        
+    <p>
+        <i class="fa fa-book"></i>
+        <a href="{{ .Permalink }}">
+            {{ .Title }}
+        </a>
     </p>
-    {{ range first 10 .Site.RegularPages }}
-    <a class="panel-block"  href="{{ .Permalink }}"><span class="panel-icon"><i class="fa fa-book"></i></span>{{ .Title }}</a>
     {{ end }}
-</nav>
-
-<nav class="panel">
-    <p class="panel-heading">
-        Category
-    </p>
-    {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
-    <a class="panel-block"  href="{{ $.Site.BaseURL}}{{ "categories" | urlize }}/{{ $name | urlize }}"><span class="panel-icon"><i class="fa fa-folder"></i></span>{{ $name }}</a>
-    {{ end }}
-</nav>
-
-<nav class="panel">
-    <p class="panel-heading">
-        Tag
-    </p>
-    {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
-    <a class="panel-block"  href="{{ $.Site.BaseURL}}{{ "tags" | urlize }}/{{ $name | urlize }}"><span class="panel-icon"><i class="fa fa-tag"></i></span>{{ $name }}</a>
-    {{ end }}
-</nav>
     
+</div>
+
+<h1 class="subtitle">Category</h1>
+<div>
+    {{ range $name, $value := .Site.Taxonomies.categories }}
+    <p>
+        <i class="fa fa-folder"></i>
+        <a href="{{ $.Site.BaseURL}}{{ " categories " | urlize }}/{{ $name | urlize }}">
+            {{ $name }}
+        </a>
+    </p>
+    {{ end }}
+</div>
+
+<h1 class="subtitle">Tag</h1>
+<div class="tag-cloud">
+    {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+    <p>
+        <i class="fa fa-tag"></i>
+        <a href="{{ $.Site.BaseURL}}{{ " tags " | urlize }}/{{ $name | urlize }}">
+            {{ $name }} 
+        </a>
+    </p>
+    {{ end }}
+</div>
