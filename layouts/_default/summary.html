@@ -4,8 +4,6 @@
 
     </header>
   
-    {{ with .Params.thumbnail }}<div class="thumb" style="background-image: url({{ $.Site.BaseURL }}{{ . }});"></div>{{ end }}
-  
     {{ .Render "article-info" }}
     <div class="article-body">{{ .Content }}</div>
   

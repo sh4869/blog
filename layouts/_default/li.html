@@ -3,10 +3,7 @@
         {{ .Render "article-info" }}
         <h2 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
     </header>
-
-    {{ with .Params.thumbnail }}<a href="{{ $.Permalink }}" class="thumb" title="{{ $.Title }}" style="background-image: url({{ $.Site.BaseURL }}{{ . }});"></a>{{ end }}
     <div class="summary">{{ .Summary }}</div>
-
     <footer>
         <a href="{{ .Permalink }}" title="{{ .Title }}">Read More…</a>
     </footer>
