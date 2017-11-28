@@ -65,11 +65,13 @@
       </section>
     {{ end }}
     
-    <main>
-      <div class="container">
-        {{ block "main" . }}{{ end }}
-      </div>
-    </main>
+    <section class="section">
+      <main>
+        <div class="container">
+          {{ block "main" . }}{{ end }}
+        </div>
+      </main>
+    </section>
     <footer class="footer">
       <div class="container">
           <div class="content has-text-centered">
