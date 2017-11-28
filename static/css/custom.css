@@ -93,4 +93,12 @@ article > header > .article-info li{
 article > header > .article-info li i{
     margin-right: 0.5em;
 }
+
+/** Article List **/
+
+ul.articles {
+    list-style: none;
+}
+ul.articles li {
+    margin-bottom: 1.5em;
 }
