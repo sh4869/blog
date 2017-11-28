@@ -35,4 +35,8 @@ section.section {
     margin-bottom: 0.5em;
     border-bottom: 1px solid rgb(0, 25, 138);
 }
+.terms .panel-block span{
+    margin-right: 0;
+    margin-left: auto;
+}
 }
