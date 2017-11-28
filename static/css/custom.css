@@ -21,6 +21,22 @@ section.section {
 .tag-cloud p {
     display: inline-block;
     margin-right: 0.5em;
+}
+
+.footerbar {
+    border-top: 1px solid rgba(145, 145, 145, 0.11);
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-top: 0.5em;
+}
+
+.footerbar .subtitle {
+    margin-top: 0.5em;
+    padding-bottom: 0.3em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid rgb(0, 25, 138);
+}
+
 .sidebar {
     padding-bottom: 1em;
 }
@@ -35,8 +51,46 @@ section.section {
     margin-bottom: 0.5em;
     border-bottom: 1px solid rgb(0, 25, 138);
 }
+
+.breadcrumb-area {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #f7f7f7;
+    margin-bottom: 1em;
+}
+
 .terms .panel-block span{
     margin-right: 0;
     margin-left: auto;
+}
+
+/** Article Content **/
+
+article {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+article.single {
+    max-width: 1200px;
+    margin-right: auto;
+    margin-left: auto;
+}
+/** Article header **/
+article > header {
+    margin-bottom: 1.5em;
+}
+article > header > .article-info {
+    margin-bottom: 1em;
+    margin-left: 0.3em;
+}
+article > header > .article-info li{
+    display: inline;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+}
+
+article > header > .article-info li i{
+    margin-right: 0.5em;
 }
 }

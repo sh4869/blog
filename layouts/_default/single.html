@@ -6,26 +6,20 @@
 {{ end }}
 
 {{ define "main" }}
-<div class="row">
-  <div class="col-md-8">
 
-    <nav class="p-crumb">
-      <ol class="breadcrumb">
+<div>
+  <div class="breadcrumb-area">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
         <li><a href="{{ .Site.BaseURL }}"><i class="fa fa-home" aria-hidden="true"></i></a></li>
         {{ with .Section }}
-        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ $.Site.BaseURL }}{{ . | urlize }}/" itemprop="url"><span itemprop="title">{{ . }}</span></a></li>
+        <li><a href="{{ $.Site.BaseURL }}{{ . | urlize }}/" itemprop="url"><span itemprop="title">{{ . }}</span></a></li>
         {{ end }}
-        <li class="active">{{ .Title }}</li>
-      </ol>
+        <li><a href="{{ .URL }}">{{ .Title }}</a></li>
     </nav>
-
-    {{ .Render "summary" }}
-
-    {{ template "_internal/disqus.html" . }}
   </div>
-
-  <div class="col-md-4">
-    {{ partial "sidebar.html" . }}
-  </div>
+  {{ .Render "summary" }}
 </div>
+
+{{ partial "footerbar.html" . }}
+
 {{ end }}

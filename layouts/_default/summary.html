@@ -1,14 +1,10 @@
 <article class="single">
-    <header>
-      <h1 class="title">{{ .Title }}</h1>
-
-    </header>
-  
+  <header>
     {{ .Render "article-info" }}
+    <h1 class="title is-2">{{ .Title }}</h1>
+  </header>
+  <div class="content">
     <div class="article-body">{{ .Content }}</div>
-  
-    <footer class="article-footer">
-    </footer>
-  
-  </article>
-  
+  </div>
+  {{ template "_internal/disqus.html" . }}
+</article>
