@@ -1,8 +1,8 @@
 {{ define "title" }}{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ end }}
 
 {{ define "main" }}
-<div class="row">
-  <div class="col-md-8">
+<div class="columns">
+  <div class="column is-8">
 
     {{ if not .IsHome }}
       <header class="page-header">
@@ -20,7 +20,7 @@
 
     {{ partial "pagination.html" . }}
   </div>
-  <div class="col-md-4">
+  <div class="column is-4">
     {{ partial "sidebar.html" . }}
   </div>
 </div>
