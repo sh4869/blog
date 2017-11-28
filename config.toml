@@ -3,6 +3,7 @@ languageCode = "ja"
 title = "Laboratory of Scarlet"
 author = "sh4869"
 googleanalytics = "UA-12345678-9"
+theme = "heroshow"
 
 [permalinks]
   post = "/posts/:year/:month/:day/:filename/"
