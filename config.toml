@@ -2,7 +2,7 @@ baseurl = "https://blog.sh4869.net/"
 languageCode = "ja"
 title = "Laboratory of Scarlet"
 author = "sh4869"
-googleanalytics = "UA-12345678-9"
+googleanalytics = "UA-46319605-19"
 theme = "heroshow"
 hasCJKLanguage = true
 
