@@ -6,6 +6,12 @@ categories: ["tech"]
 title: "STMFlashLoader をコマンドラインから使う"
 ---
 
+これはSTM32 Advent Calendar 2017の9日目の記事です．
+
+{{<embedly src="https://qiita.com/advent-calendar/2017/stm32" title="stm32 Advent Calendar 2017 - Qiita">}}
+
+この記事ではSTMFlashLoaderという書き込みソフトをコマンドラインから使うことを解説していきます^[需要があるのかはわかりませんが]．
+
 <script async src="//cdn.embedly.com/widgets/platform.js"></script>
 
 STM32には様々な書き込み方法がありますが，その一つに公式から提供されているSTMFlashLoader（以下Flash Loader）を使って書き込むというものがあります．
@@ -13,7 +19,7 @@ STM32には様々な書き込み方法がありますが，その一つに公式
 * [FLASHER\-STM32 \- STM32 Flash loader demonstrator \(UM0462\) \- STMicroelectronics](https://my.st.com/content/my_st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/flasher-stm32.license%3d1512066019528.product%3dFLASHER-STM32.html)
 {{<embedly src="https://my.st.com/content/my_st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/flasher-stm32.license%3d1512066019528.product%3dFLASHER-STM32.html" title="FLASHER-STM32 - STM32 Flash loader demonstrator (UM0462) - STMicroelectronics">}}
 
-比較的古い型番のSTM32を利用する場合はこちらを使うことが多いかと思います．このFlashLoaderですが，実はインストールするとコマンドラインインターフェースも同時についてくるので，CLIとして使うことが可能です．今回はそのやり方を^[後輩に書くといってしまったので]かんたんにまとめて見ます．
+比較的古い型番のSTM32を利用する場合はこちらを使うことが多いかと思います．『STM32マイコン徹底入門』という本があって，その中でも紹介されていました．このFlashLoaderですが，実はインストールするとコマンドラインインターフェースも同時についてくるので，CLIとして使うことが可能です．今回はそのやり方を^[後輩に書くといってしまったので]かんたんにまとめて見ます．
 
 ## STMFlashLodaerの準備
 
@@ -165,3 +171,4 @@ Flash Loaderで書き込んでると死ぬほど書き込みに時間がかか�
 ## 参考
 
 - [6\.2\.4\.4\. makefileの修正 (マイコン徹底入門)](http://miqn.net/introduction/139.html)
+- <a target="_blank" href="https://www.amazon.co.jp/gp/product/4789849864/ref=as_li_tl?ie=UTF8&camp=247&creative=1211&creativeASIN=4789849864&linkCode=as2&tag=sh486906-22&linkId=cd7c3adc55fb3d9ab966dcfe7d037125">STM32マイコン徹底入門 (TECH I Processor)</a><img src="//ir-jp.amazon-adsystem.com/e/ir?t=sh486906-22&l=am2&o=9&a=4789849864" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
