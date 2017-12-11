@@ -171,4 +171,4 @@ Flash Loaderで書き込んでると死ぬほど書き込みに時間がかか�
 ## 参考
 
 - [6\.2\.4\.4\. makefileの修正 (マイコン徹底入門)](http://miqn.net/introduction/139.html)
-- <a target="_blank" href="https://www.amazon.co.jp/gp/product/4789849864/ref=as_li_tl?ie=UTF8&camp=247&creative=1211&creativeASIN=4789849864&linkCode=as2&tag=sh486906-22&linkId=cd7c3adc55fb3d9ab966dcfe7d037125">STM32マイコン徹底入門 (TECH I Processor)</a><img src="//ir-jp.amazon-adsystem.com/e/ir?t=sh486906-22&l=am2&o=9&a=4789849864" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+- [STM32マイコン徹底入門 \(TECH I Processor\) \| 川内 康雄 \|本 \| 通販 \| Amazon](https://www.amazon.co.jp/STM32%E3%83%9E%E3%82%A4%E3%82%B3%E3%83%B3%E5%BE%B9%E5%BA%95%E5%85%A5%E9%96%80-TECH-Processor-%E5%B7%9D%E5%86%85-%E5%BA%B7%E9%9B%84/dp/4789849864)
