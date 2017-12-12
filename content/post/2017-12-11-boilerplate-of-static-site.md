@@ -84,7 +84,7 @@ Webサイトのビルドを行うにあたって，Pug や Scss をいちいち�
 
 ## システム説明
 
-では選択ツールの話もおわったので，実際にどのような package.json や gulpfile.json を使っているのか解説しておきたいと思います．
+では選択ツールの話もおわったので，実際にどのような package.json や gulpfile.js を使っているのか解説しておきたいと思います．
 
 ### package.json
 
