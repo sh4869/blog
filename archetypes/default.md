@@ -1,7 +1,8 @@
-+++
-date = ""
-slug = ""
-tags = ["", ""]
-title = ""
-
-+++
+---
+date: ""
+slug: ""
+tags: ["", ""]
+title: ""
+categories: [""]
+comments: true
+---
