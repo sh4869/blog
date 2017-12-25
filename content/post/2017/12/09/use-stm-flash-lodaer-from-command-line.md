@@ -1,6 +1,8 @@
 ---
 date: "2017-12-09T17:11:05+09:00"
 slug: "post"
+aliases:
+    - /posts/2017/12/09/2017-12-09-use-stm-flash-lodaer-from-command-line/
 tags: ["STM32"]
 categories: ["tech"]
 title: "STMFlashLoader をコマンドラインから使う"

@@ -7,7 +7,7 @@ theme = "heroshow"
 hasCJKLanguage = true
 
 [permalinks]
-  post = "/posts/:year/:month/:day/:filename/"
+  post = "/:slug/:year/:month/:day/:filename/"
 
 [outputFormats.RSS]
   baseName = "feed"

@@ -1,6 +1,8 @@
 ---
 date: "2017-11-28T17:11:05+09:00"
 slug: "post"
+aliases:
+    - /posts/2017/11/28/2017-11-28-create-hugo-theme-heroshow/
 categories:  ["tech"]
 tags: ["design","blog"]
 title: "hugoの新しいテーマ『heroshow』を作った"

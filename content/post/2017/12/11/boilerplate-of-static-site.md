@@ -1,6 +1,8 @@
 ---
 date: "2017-12-10T17:11:05+09:00"
 slug: "post"
+aliases:
+    - /posts/2017/12/10/2017-12-11-boilerplate-of-static-site/
 categories: ["tech"]
 tags: ["tech", "Web"]
 title: "静的Webサイトを作るためのボイラープレート"

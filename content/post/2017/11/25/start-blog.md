@@ -1,5 +1,7 @@
 ---
 date: "2017-11-25T23:11:05+09:00"
+aliases:
+    - /posts/2017/11/25/2017-11-25-start-blog/
 slug: "post"
 categories:  ["greeting"]
 tags: ["greeting","blog"]
