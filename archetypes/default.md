@@ -1,5 +1,5 @@
 ---
-date: ""
+date: {{ .Date }}
 slug: ""
 tags: ["", ""]
 title: ""
