@@ -1,12 +1,10 @@
 ---
 date: "2018-03-14T12:11:05+09:00"
-slug: "memo"
+slug: "post"
 tags: ["tech", "ArchLinux","Flutter","Dartlang"]
 title: "ArchLinuxでFlutterをインストールするときのメモ"
 categories: ["tech"]
 comments: true
-aliases:
-    - /post/2018/03/14/flutter-setup-archlinux/
 ---
 
 ArchLinuxでFlutterをセットアップするときのメモです。特に躓くことはないのですが、一部別にパッケージをインストールする必要があるのでメモしておきます。
