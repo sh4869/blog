@@ -123,7 +123,7 @@ dependencies をそれぞれ解説しておきたいと思います．
 * `gulp-sass` : sassのビルドに利用
 * `sass-module-importer` : npmで提供されている css のファイルを sass の import 文で import 出来るようになるのでめちゃくちゃ便利
 
-npm のいいところは package.json にまとめて記述しておけば相手が npm の環境さえ整えておいてくれれば問題がないので便利ですね．
+npm のいいところは package.json にまとめて記述しておけば相手が npm の環境さえ整えておいてくれれば問題がないというところです．
 
 ### gulpfile.js
 
