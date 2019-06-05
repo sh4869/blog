@@ -102,3 +102,8 @@ ul.articles {
 ul.articles li {
     margin-bottom: 1.5em;
 }
+
+.embedly-card-hug {
+    border: 1px #ddd solid;
+    border-radius: 5px;
+}
