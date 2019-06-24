@@ -28,13 +28,13 @@ Andrey Mokhov氏のブログの記事で、この論文を書いた意図の解�
 
 # 論文内容
 
-## 1. Introduction
+## 1. INTRODUCTION
 
 ビルドシステムはソフトウェア開発者であれば誰でも使ったことがあるはずだが^[原文では "and used by every software developer on the planet" となっている。スケールがでかい。]、ソフトウェアのエコシステムの中で愛されていない分野であり、またその研究も多くはないということが指摘されている。
 
 TODO: 導入をちゃんとまとめる
 
-## 2. Background
+## 2. BACKGROUND
 
 BackGroundでは、Make、Shake、Bazel、Excelの4つを例に取り、ビルドシステムがなにかについて説明している。
 
