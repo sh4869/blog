@@ -2,7 +2,7 @@
 date: 2019-10-10T16:22:45+09:00
 slug: "post"
 tags: ["memo"]
-title: "VScodeのLaTeX Workshopの設定について"
+title: "VSCodeのLaTeX Workshopの設定について"
 categories: ["tech"]
 comments: true
 ---
