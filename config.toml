@@ -15,19 +15,20 @@ hasCJKLanguage = true
 [params]
 disqusShortname = "blog-sh4869-net"
 custom_css = ["css/custom.css"]
-
-[[menu.main]]
-name = "sh4869.net"
-url = "http://sh4869.net"
-weight = 1
+description = "Work is the best antidote to sorrow, my dear Watson"
 
 [[menu.main]]
 name = "Categories"
 url = "/categories/"
-weight = 2
+weight = 1
 
 [[menu.main]]
 name = "Tags"
 url  = "/tags/"
+weight = 2
+
+[[menu.main]]
+name = "About"
+url = "http://sh4869.net"
 weight = 3
 
