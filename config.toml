@@ -6,6 +6,9 @@ googleanalytics = "UA-46319605-19"
 theme = "heroshow"
 hasCJKLanguage = true
 
+[markup]
+  defaultMarkdownHandler = "blackfriday"
+
 [permalinks]
   post = "/:slug/:year/:month/:day/:filename/"
 
