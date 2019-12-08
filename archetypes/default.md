@@ -1,6 +1,6 @@
 ---
 date: {{ .Date }}
-slug: ""
+slug: "post"
 tags: ["", ""]
 title: ""
 categories: [""]
