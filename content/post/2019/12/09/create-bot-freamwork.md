@@ -68,7 +68,11 @@ Bot フレームワークを作ることを選んだのは、以下のような�
 - なるべく問題はコンパイル時にチェックしたい
 - 書きやすい
 
-修正を。
+パフォーマンスを重視しないのは、そこまで求められることがないからという理由です。もちろん遅すぎる場合は問題になりますが、一般に使われるBotはそこまでの応答性を求められず、またたくさんのリクエストも処理する必要がないことがほとんどです。そのため、パフォーマンスと書きやすさ・使いやすさのトレードオフになる場合は後者を選択します。
+
+なるべく問題をコンパイル時にチェックしたいというのは、まあ要するに型のことです。一般にBotはある情報からある情報への変換になるので、そのとき欠けている情報があるなどの理由で実行時エラーを起こしたくはないですよね。なので、なるべく書いた時点でチェックをしたいと思います。
+
+もう一つ求めることとして、書きやすさがありますね。なるべく楽に書きたいという欲求はあるでしょう。一度作ったパーツを再利用しやすいといった特性があると嬉しそうですね。
 
 ## 入力・処理・出力
 
@@ -134,15 +138,33 @@ val discordOutput = ...
 val bot = slackInput.filter(/* フィルター条件を書く*/).to(discordOutput)
 ```
 
-## Input as a Stream, Output as a Stream
+## Input as a Stream, Output as a Stream, Process as a Stream
 
 入力・処理・出力にわけることにしたら、それぞれをどのように表すかを考えましょう。様々な方法があり、一般に多く使われるのはいわゆるイベント駆動^[[Node\.jsのイベントループを理解する \| POSTD](https://postd.cc/understanding-the-nodejs-event-loop/)]です。
 
-今回もそのアプローチをとってもいいのですが、
+今回もそのアプローチをとってもいいのですが、今回はStreamを使ってみましょう。上の例を見ると、InputもOutputも流れてくるデータを処理するものですね。そうなると Streamで処理をしようとするのはそこまで間違ったアプローチではなさそうです。
 
-# 作成
+Streamといっても様々なライブラリがあるのでどれを選択するかは難しい問題ですが、今回はScalaの[fs2](https://fs2.io)を使いたいと思います。^[筆者がなれているので]
 
-## ベースコード
+## 設計まとめ
+
+- 入力・処理・出力を分ける
+- （特に入力、出力に関して）再利用の可能な形にする
+- Streamを使った設計を行う
+
+# 実装
+
+それでは実装をしていきましょう。
+
+fs2のコードを解説する余裕はないので公式ドキュメントを見てください。日本語だとこのあたりのQiitaの記事が非常にまとまっていて読みやすいです。
+
+- [fs2 によるリアクティブな温度変換 \- Qiita](https://qiita.com/yasuabe2613/items/4573e5010a711e569c79)
+- [fs2 の並行処理 〜 Queue編 \- Qiita](https://qiita.com/yasuabe2613/items/731cbf9fc991dda24c10)
+- [fs2 の並行処理 〜 Topic\+Signal編 \- Qiita](https://qiita.com/yasuabe2613/items/3c32e530d24bc3610c5c)
+
+## Coreの設計
+
+出来上がったものがこちらになります。
 
 ```scala
 package net.sh4869.bot
@@ -151,23 +173,125 @@ import cats.effect.Concurrent
 import fs2.Pipe
 import fs2.Stream
 
-
 object Core {
-  // T
+  // T を流すStream
   type Input[F[_], T] = Stream[F, T]
-  //
-  type Output[F[_], T] = Pipe[F, T, Unit]
+  // Iの型のものを受け取ってOに変換する処理
   type Process[F[_], I, O] = Pipe[F, I, O]
-
+  // Tを出力して何らの処理を行う。Outputは終点なのでUnit。
+  type Output[F[_], T] = Pipe[F, T, Unit]
   // Bot。名前とInput、処理、Outputを受け取る。
   case class Bot[F[_] : Concurrent, I, O](name: String, input: Input[F, I], process: Process[F, I, O], output: Output[F, O]) {
-    // Streamを
+    // Streamを作成する。inputからprocessを通りoutputに流す。
     def stream: Stream[F, Unit] = input.through(process).through(output)
   }
 }
 ```
 
-概ねこのコードをベースに実装をしていくと良さそうです。
+コアの設計はシンプルですね。Input -> Process -> Outputの順番でデータが加工されていくことを考えればいいでしょう。Fって何？と思う型がいると思いますが、これはエフェクトタイプです。わからない方は「は？」という感じだと思いますが、イメージとしてある`F[A]`という型があったとき、`A`を返す何らかの特徴を持つそれを包む型とでも思ってください。
+
+概ねこのコードをベースに実装をしていくと良さそうです。この実装をもとに、いくつかBotを作ってみましょう。
+
+```scala
+package net.sh4869.bot
+
+import cats.effect.ExitCode
+import cats.effect.IO
+import cats.effect.IOApp
+import cats.syntax.functor._
+import fs2.Pipe
+import fs2.Stream
+import net.sh4869.bot.Core._
+
+object MainApp extends IOApp {
+  override def run(args: List[String]): IO[ExitCode] = {
+    val input: Input[IO, String] = Stream("one", "two", "three")
+    val pipe: Process[IO, String, String] = _.map(v => s"count: ${v}")
+    val output: Pipe[IO, String, Unit] = _.map(x => println(x))
+    val bot = Bot("bot1", input, pipe, output)
+    bot.stream.compile.drain.as(ExitCode.Success)
+  }
+}
+```
+
+```console
+$ sbt run
+count: one
+count: two
+count: three
+```
+
+これは文字列one,two,threeを流して、それにそれぞれ`count: `というprefixを足し、それをプリントするものです。それぞれの処理が分離してかけていますね。もう一つ例を見てみましょう。
+
+
+```scala
+package net.sh4869.bot
+
+import cats.effect.ExitCode
+import cats.effect.IO
+import cats.effect.IOApp
+import cats.syntax.functor._
+import fs2.Pipe
+import fs2.Stream
+import net.sh4869.bot.Core._
+import scala.concurrent.duration._
+
+object MainApp extends IOApp {
+  override def run(args: List[String]): IO[ExitCode] = {
+    val input: Input[IO, String] = Stream.awakeEvery[IO](5.seconds).map(_ => "5.seconds")
+    val pipe: Process[IO, String, String] = _.map(v => s"count: ${v}")
+    val output: Pipe[IO, String, Unit] = _.map(x => println(x))
+    val bot = Bot("bot1", input, pipe, output)
+    bot.stream.compile.drain.as(ExitCode.Success)
+  }
+}
+```
+
+```console
+$ sbt run
+count: 5.second
+count: 5.second
+count: 5.second
+count: 5.second
+︙
+```
+
+## 標準入出力
+
+さて、このままだと特に面白くはないので、標準入出力を例に考えてみましょう。
+
+```scala
+package net.sh4869.bot
+
+import cats.effect.Blocker
+import cats.effect.ConcurrentEffect
+import cats.effect.ContextShift
+import fs2.Stream
+import fs2.concurrent.Queue
+import fs2.concurrent.Topic
+import fs2.io
+import fs2.text
+import net.sh4869.bot.Core._
+
+class StdInOut[F[_] : ContextShift](blocker: Blocker)(implicit F: ConcurrentEffect[F]) {
+
+  private val topic = F.toIO(Topic[F, String]("")).unsafeRunSync()
+
+  private val queue = F.toIO(Queue.bounded[F, String](100)).unsafeRunSync()
+
+  private val inputS = io.stdin[F](4096, blocker).through(text.utf8Decode).through(topic.publish)
+
+  private val outputS = queue.dequeue.through(text.utf8Encode).through(io.stdout[F](blocker))
+
+  def start: Stream[F, Unit] = Stream(inputS, outputS).parJoinUnbounded
+
+  def stdin: Input[F, String] = topic.subscribe(100)
+
+  def stdout: Output[F, String] = queue.enqueue
+}
+```
+
+StdInOutというクラスを作りました。基本的には`start`と`stdin`と`stdout`の型に注目してもらえればいいです。
 
 ```scala
 package net.sh4869.bot
@@ -176,50 +300,119 @@ import cats.effect.Blocker
 import cats.effect.ExitCode
 import cats.effect.IO
 import cats.effect.IOApp
-import com.softwaremill.macwire.wireSet
+import cats.syntax.functor._
 import fs2.Pipe
 import fs2.Stream
-import fs2.concurrent.Topic
-import fs2.io
-import fs2.text
 import net.sh4869.bot.Core._
 
 object MainApp extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = {
-    // stdinを共有するためのtopic
-    val topic = Topic[IO, String]("").unsafeRunSync()
-    val stream = Stream.resource(Blocker[IO]).flatMap(v => io.stdin[IO](4096, v).through(text.utf8Decode).through(topic.publish))
-
-    // 1つ目のBot
-    val input: Input[IO, String] = topic.subscribe(100)
-    val pipe: Process[IO, String, String] = _.filter(!_.isEmpty).map(v => s"input1: $v")
-    val output: Pipe[IO, String, Unit] = x => {
-      Stream.resource(Blocker[IO]).flatMap(v => x.through(text.utf8Encode).through(io.stdout(v)))
-    }
-    val bot = Bot("bot1", input, pipe, output)
-
-    // 2つ目のBot
-    val input2: Input[IO, String] = topic.subscribe(100)
-    val output2: Pipe[IO, Byte, Unit] = x => {
-      Stream.resource(Blocker[IO]).flatMap(v => x.through(io.stdout(v)))
-    }
-    val pipe2: Process[IO, String, Byte] = _.filter(!_.isEmpty).map(v => s"input2: $v").through(text.utf8Encode)
-    val bot2 = Bot("tes2", input2, pipe2, output2)
-
-    lazy val bots = wireSet[Bot[IO, _, _]].toSeq
-    Stream(bots.map(_.stream) :+ stream: _*).parJoinUnbounded.compile.drain.map(_ => ExitCode.Success)
+    Stream.resource(Blocker[IO]).flatMap(v => {
+      val stdInOut = new StdInOut[IO](v)
+      val input: Input[IO, String] = stdInOut.stdin
+      val pipe: Process[IO, String, String] = _.filter(!_.isEmpty).map(v => s"input: ${v}")
+      val output: Pipe[IO, String, Unit] = stdInOut.stdout
+      val bot = Bot("bot1", input, pipe, output)
+      bot.stream concurrently stdInOut.start
+    }).compile.drain.as(ExitCode.Success)
   }
 }
+```
 
+標準入力に来た文字列に`input: `を追加し、標準出力に出力していくプログラムです。これも今までの例と同じようにinput, pipe, outputを分けることができています。
+
+```
+1
+input: 1
+2
+input: 2
+3
+input: 3
+```
+
+共有可能であることを示すために、先程までのプログラムに加えて5秒ごとに標準出力に出力するプログラムも追加してみましょう。
+
+```scala
+package net.sh4869.bot
+
+import cats.effect.Blocker
+import cats.effect.ExitCode
+import cats.effect.IO
+import cats.effect.IOApp
+import cats.syntax.functor._
+import fs2.Pipe
+import fs2.Stream
+import net.sh4869.bot.Core._
+import scala.concurrent.duration._
+
+object MainApp extends IOApp {
+  override def run(args: List[String]): IO[ExitCode] = {
+    Stream.resource(Blocker[IO]).flatMap(v => {
+      val stdInOut = new StdInOut[IO](v)
+      val input: Input[IO, String] = stdInOut.stdin
+      val pipe: Process[IO, String, String] = _.filter(!_.isEmpty).map(v => s"input: ${v}")
+      val output: Pipe[IO, String, Unit] = stdInOut.stdout
+      val bot = Bot("bot1", input, pipe, output)
+
+      val input2: Input[IO, String] = Stream.awakeEvery[IO](5.seconds).map(_ => "5 seconds")
+      val pipe2: Process[IO, String, String] = _.filter(!_.isEmpty).map(v => s"interrupt: ${v}")
+      val output2: Pipe[IO, String, Unit] = stdInOut.stdout
+      val bot2 = Bot("bot1", input2, pipe2, output2)
+      Stream(bot.stream, bot2.stream, stdInOut.start).parJoinUnbounded
+    }).compile.drain.as(ExitCode.Success)
+  }
+}
+```
+
+```
+interrupt: 5 seconds
+1
+input: 1
+interrupt: 5 seconds
+22
+input: 22
+3
+input: 3
+interrupt: 5 seconds
 ```
 
 ## エラー処理
+
+ここでエラー処理に目を向けてみましょう。以下のように入力された数字をパースしてそれに1を足した数字を出力するBotを考えてみましょう。
+
+```scala
+package net.sh4869.bot
+
+import cats.effect.Blocker
+import cats.effect.ExitCode
+import cats.effect.IO
+import cats.effect.IOApp
+import cats.syntax.functor._
+import fs2.Pipe
+import fs2.Stream
+import net.sh4869.bot.Core._
+
+object MainApp extends IOApp {
+  override def run(args: List[String]): IO[ExitCode] = {
+    Stream.resource(Blocker[IO]).flatMap(v => {
+      val stdInOut = new StdInOut[IO](v)
+      val input: Input[IO, String] = stdInOut.stdin
+      val pipe: Process[IO, String, String] = _.filter(!_.isEmpty).map(v => s"> ${v.toDouble + 1}\n")
+      val output: Pipe[IO, String, Unit] = stdInOut.stdout
+      val bot = Bot("bot1", input, pipe, output)
+      Stream(bot.stream, stdInOut.start).parJoinUnbounded
+    }).compile.drain.as(ExitCode.Success)
+  }
+}
+```
+
+これを実行すると、当然数字以外の入力に対してエラーが発生します^[本来ならtoDoubleのところで例外処理をすべきというツッコミは一旦置いておいてください]。
 
 ```
 $ sbt run
 (中略)
 1
-2.0
+> 2.0
 x
 java.lang.NumberFormatException: For input string: "x"
         at sun.misc.FloatingDecimal.readJavaFormatString(Unknown Source)
@@ -233,40 +426,66 @@ java.lang.NumberFormatException: For input string: "x"
         at fs2.internal.FreeC$ViewL$$anon$9$$anon$10.<init>(FreeC.scala:204)
 ```
 
-エラーを処理してほしい。
+困りましたね。エラーを処理してほしい。そこで、Coreの部分にちょっと手を加えます。
 
 ```scala
 package net.sh4869.bot
 
-import cats.effect.Blocker
-import cats.effect.ExitCode
-import cats.effect.IO
-import cats.effect.IOApp
-import com.softwaremill.macwire.wireSet
 import fs2.Pipe
 import fs2.Stream
-import fs2.concurrent.Topic
-import fs2.io
-import fs2.text
-import net.sh4869.bot.Core._
 
-object MainApp extends IOApp {
-  override def run(args: List[String]): IO[ExitCode] = {
-    // stdinを共有するためのtopic
-    val topic = Topic[IO, String]("").unsafeRunSync()
-    val stream = Stream.resource(Blocker[IO]).flatMap(v => io.stdin[IO](4096, v).through(text.utf8Decode).through(topic.publish))
 
-    // 1つ目のBot
-    val input: Input[IO, String] = topic.subscribe(100)
-    val pipe: Process[IO, String, Byte] = _.filter(!_.isEmpty).map(v => s"${v.toDouble + 1}\n").through(text.utf8Encode)
-    val output: Pipe[IO, Byte, Unit] = x => {
-      Stream.resource(Blocker[IO]).flatMap(v => x.through(io.stdout(v)))
-    }
-    val bot = Bot("bot1", input, pipe, output)
-    lazy val bots = wireSet[Bot[IO, _, _]].toSeq
-    Stream(Stream.resource(Blocker[IO]).flatMap(bl => Stream(bots.map(_.stream(bl)) :+ stream: _*))).parJoinUnbounded.compile.drain.map(_ => ExitCode.Success)
+object Core {
+  type Input[F[_], T] = Stream[F, T]
+  type Process[F[_], I, O] = Pipe[F, I, O]
+  type Output[F[_], T] = Pipe[F, T, Unit]
+
+  case class Bot[F[_], I, O](name: String, input: Input[F, I], process: Process[F, I, O], output: Output[F, O]) {
+    def stream: Pipe[F, String, Unit] => Stream[F, Unit] = onError =>
+      input.through(process).through(output).handleErrorWith { e => Stream(s"bot $name error: ${e.toString}\n").through(onError) }
   }
+
 }
 ```
 
-## 利用するリソースを走らせる
+`stream`の引数に`Pipe[F, String, Unit]`を追加しました。これでエラーが発生したときにそのエラーメッセージを`onError`に流すことが可能です。今回はそのままエラーも標準出力に出力するパターンを考えてみましょう。
+
+```scala
+override def run(args: List[String]): IO[ExitCode] = {
+    Stream.resource(Blocker[IO]).flatMap(v => {
+        val stdInOut = new StdInOut[IO](v)
+        val input: Input[IO, String] = stdInOut.stdin
+        val pipe: Process[IO, String, String] = _.filter(!_.isEmpty).map(v => s"> ${v.toDouble + 1}\n")
+        val output: Pipe[IO, String, Unit] = stdInOut.stdout
+        val bot = Bot("bot1", input, pipe, output)
+        Stream(bot.stream(stdInOut.stdout), stdInOut.start).parJoinUnbounded
+    }).compile.drain.as(ExitCode.Success)
+}
+```
+
+```
+$sbt run
+1
+> 2.0
+2
+> 3.0
+x
+bot bot1 error: java.lang.NumberFormatException: For input string: "x"
+```
+
+## Slackのクライアントを作る
+
+ホントはここからが一番おもしろいんですが体力が切れたのでここまでにします……。次また記事を書きます。
+
+### 次回予告
+
+- BotResourceの管理をする
+- Slackのクライアントを作る
+
+今回作ったコードは[GitHub](https://github.com/sh4869/knight)に公開してあります。
+
+# おわりに
+
+いかにも初心者向けみたいな文体で初めておいてなんですが、fs2を使ってる時点である程度難しくなるのは自明でしたね。すいません……。
+
+みなさんが自分で設計するということにチャレンジしてみたり、fs2やストリームプログラミングに興味を持ってもらえたら幸いです。

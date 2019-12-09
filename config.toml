@@ -5,6 +5,8 @@ author = "sh4869"
 googleanalytics = "UA-46319605-19"
 theme = "heroshow"
 hasCJKLanguage = true
+pygmentsUseClasses = true
+
 
 [markup]
   defaultMarkdownHandler = "blackfriday"
