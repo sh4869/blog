@@ -7,7 +7,6 @@ theme = "heroshow"
 hasCJKLanguage = true
 pygmentsUseClasses = true
 
-
 [markup]
   defaultMarkdownHandler = "blackfriday"
 
