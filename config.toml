@@ -20,6 +20,7 @@ pygmentsUseClasses = true
 disqusShortname = "blog-sh4869-net"
 custom_css = ["css/custom.css"]
 description = "Work is the best antidote to sorrow, my dear Watson"
+icon = "/images/blog-icon.png"
 
 [[menu.main]]
 name = "Categories"
