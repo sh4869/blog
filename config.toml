@@ -6,6 +6,7 @@ googleanalytics = "UA-46319605-19"
 theme = "heroshow"
 hasCJKLanguage = true
 pygmentsUseClasses = true
+summaryLength = 200
 
 [markup]
   defaultMarkdownHandler = "blackfriday"
@@ -19,7 +20,7 @@ pygmentsUseClasses = true
 [params]
 disqusShortname = "blog-sh4869-net"
 custom_css = ["css/custom.css"]
-description = "Work is the best antidote to sorrow, my dear Watson"
+description = "@sh4869 tech blog"
 icon = "/images/blog-icon.png"
 
 [[menu.main]]
