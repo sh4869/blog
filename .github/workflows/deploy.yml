@@ -27,7 +27,7 @@ jobs:
         env:
           INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_HOOKS }}
         with:
-          text: deploy blogs.
+          text: "[BLOG] DEPLOY COMPLETE"
           attachments: |
             [
               {
