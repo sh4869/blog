@@ -7,6 +7,7 @@ theme = "heroshow"
 hasCJKLanguage = true
 pygmentsUseClasses = true
 summaryLength = 200
+disqusShortname = "blog-sh4869-net"
 
 [markup]
   defaultMarkdownHandler = "blackfriday"
@@ -18,20 +19,9 @@ summaryLength = 200
   baseName = "feed"
 
 [params]
-disqusShortname = "blog-sh4869-net"
 custom_css = ["css/custom.css"]
 description = "@sh4869 tech blog"
 icon = "/images/blog-icon.png"
-
-[[menu.main]]
-name = "Categories"
-url = "/categories/"
-weight = 1
-
-[[menu.main]]
-name = "Tags"
-url  = "/tags/"
-weight = 2
 
 [[menu.main]]
 name = "About"
