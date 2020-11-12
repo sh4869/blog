@@ -9,9 +9,7 @@ comments: true
 
 <script async src="//cdn.embedly.com/widgets/platform.js"></script>
 
-ぼちぼちやってたのでメモ。
-
-<!--more-->
+今までブログや日記等に travis-ci を使っていたところを、GitHub Actions に移行した。移行作業自体そこまで大変ではなかったけど、こういうのはメモしておかないと文法や作法を忘れてしまうので備忘録的に書いておく。
 
 # diary
 
@@ -24,25 +22,25 @@ comments: true
 
 手元でもざっとビルドできるように、`cargo run`してから`firebase deploy`するとデプロイされるようになっている。デプロイ先は[diary.sh4869.net](https://diary.sh4869.net)。
 
-## Before: Travis CIファイル
+## Before: Travis CI ファイル
 
 ```yml
-dist: trusty	
-language: rust	
+dist: trusty
+language: rust
 rust:
-- nightly	
+  - nightly
 before_install:
-- nvm install node	
-- nvm use node	
-- npm install -g firebase-tools	
-after_success: export RUST_BACKTRACE=1 && cargo run && firebase --token $FIREBASE_TOKEN	
-  --project sh4869-diary deploy	
+  - nvm install node
+  - nvm use node
+  - npm install -g firebase-tools
+after_success: export RUST_BACKTRACE=1 && cargo run && firebase --token $FIREBASE_TOKEN
+  --project sh4869-diary deploy
 notifications:
   slack:
     secure: (省略)
 ```
 
-firebaseはfirebase-toolsを使ってデプロイするようになっているので、Rust環境にnvmを使って（これはTravis CIのLinux環境）nodeをインストールしてからnpm installでfirebase toolsをインストールしている。
+firebase は firebase-tools を使ってデプロイするようになっているので、Rust 環境に nvm を使って（これは Travis CI の Linux 環境）node をインストールしてから npm install で firebase tools をインストールしている。
 
 ## After: GitHub Actions
 
@@ -51,63 +49,62 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install latest nightly
-      uses: actions-rs/toolchain@v1
-      with:
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
           toolchain: nightly
           override: true
-    - uses: actions/checkout@v2
-    - name: Run cargo check
-      uses: actions-rs/cargo@v1
-      with:
-        command: run
-    - name: GitHub Action for Firebase
-      uses: w9jds/firebase-action@v1.5.0
-      with:
-          args: deploy --token $FIREBASE_TOKEN --only hosting --project sh4869-diary 
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-    - name: Slack Notification
-      if: success()
-      uses: tokorom/action-slack-incoming-webhook@master
-      env:
-        INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_HOOKS }}
-      with:
-        text: deploy diaries.
-        attachments: |
-          [
-            {
-              "color": "good",
-              "author_name": "${{ github.actor }}",
-              "author_icon": "${{ github.event.sender.avatar_url }}",
-              "fields": [
-                {
-                  "title": "Commit Message",
-                  "value": "${{ github.event.head_commit.message }}"
-                }
-              ]
-            }
-          ]
+      - uses: actions/checkout@v2
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: run
+      - name: GitHub Action for Firebase
+        uses: w9jds/firebase-action@v1.5.0
+        with:
+          args: deploy --token $FIREBASE_TOKEN --only hosting --project sh4869-diary
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Slack Notification
+        if: success()
+        uses: tokorom/action-slack-incoming-webhook@master
+        env:
+          INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_HOOKS }}
+        with:
+          text: deploy diaries.
+          attachments: |
+            [
+              {
+                "color": "good",
+                "author_name": "${{ github.actor }}",
+                "author_icon": "${{ github.event.sender.avatar_url }}",
+                "fields": [
+                  {
+                    "title": "Commit Message",
+                    "value": "${{ github.event.head_commit.message }}"
+                  }
+                ]
+              }
+            ]
 ```
 
-上のActionsファイルでは、以下のような順番でビルドを行っている。
+上の Actions ファイルでは、以下のような順番でビルドを行っている。
 
-* rust nightly インストール
-* git repository checkout
-* cargo run
-* firebase deploy
-* slack  notification
+- rust nightly インストール
+- git repository checkout
+- cargo run
+- firebase deploy
+- slack notification
 
 ### git repository install
 
@@ -123,7 +120,7 @@ jobs:
 
 <p><a href="https://github.com/marketplace/actions/rust-toolchain" class="embedly-card">rust-toolchain · Actions · GitHub Marketplace</a></p>
 
-rust-toolchainを使うと、Rustのnightly等を選択してインストールすることができる。ここでインストールしたCargoを使いたいので、`override`に`true`を指定している。
+rust-toolchain を使うと、Rust の nightly 等を選択してインストールすることができる。ここでインストールした Cargo を使いたいので、`override`に`true`を指定している。
 
 ```yml
 - name: Install latest nightly
@@ -141,53 +138,53 @@ rust-toolchainを使うと、Rustのnightly等を選択してインストール�
 
 <a href="https://github.com/w9jds/firebase-action" class="embedly-card">w9jds/firebase-action: GitHub Action for interacting with Firebase</a>
 
-Firebase deployはfirebase-actionを使う。deployするときにKEYが必要なので、`firebase login:ci`で発行したキーをsecretsに追加する。secretsはRepository Settingから追加できる。
+Firebase deploy は firebase-action を使う。deploy するときに KEY が必要なので、`firebase login:ci`で発行したキーを secrets に追加する。secrets は Repository Setting から追加できる。
 
 ```yml
--   name: GitHub Action for Firebase
-    uses: w9jds/firebase-action@v1.5.0
-    with:
-        args: deploy --token $FIREBASE_TOKEN --only hosting --project sh4869-diary 
-    env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+- name: GitHub Action for Firebase
+  uses: w9jds/firebase-action@v1.5.0
+  with:
+    args: deploy --token $FIREBASE_TOKEN --only hosting --project sh4869-diary
+  env:
+    FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 ```
 
-### slackへの通知
+### slack への通知
 
-<a href="https://spinners.work/posts/github-actions-context/" class="embedly-card">Github ActionsからSlackへ通知するのを良い感じにしたい | Spinners Inc.</a>
+<a href="https://spinners.work/posts/github-actions-context/" class="embedly-card">Github Actions から Slack へ通知するのを良い感じにしたい | Spinners Inc.</a>
 
-いくつか候補があったけれど、上の記事のが良さげだったので使わせてもらった。GitHub Actionsnの明確な利点は他人が作ったActionsを使えることである。
+いくつか候補があったけれど、上の記事のが良さげだったので使わせてもらった。GitHub Actionsn の明確な利点は他人が作った Actions を使えることである。
 
 ```yml
--     name: Slack Notification
-      if: success()
-      uses: tokorom/action-slack-incoming-webhook@master
-      env:
-        INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_HOOKS }}
-      with:
-        text: deploy diaries.
-        attachments: |
-          [
+- name: Slack Notification
+  if: success()
+  uses: tokorom/action-slack-incoming-webhook@master
+  env:
+    INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_HOOKS }}
+  with:
+    text: deploy diaries.
+    attachments: |
+      [
+        {
+          "color": "good",
+          "author_name": "${{ github.actor }}",
+          "author_icon": "${{ github.event.sender.avatar_url }}",
+          "fields": [
             {
-              "color": "good",
-              "author_name": "${{ github.actor }}",
-              "author_icon": "${{ github.event.sender.avatar_url }}",
-              "fields": [
-                {
-                  "title": "Commit Message",
-                  "value": "${{ github.event.head_commit.message }}"
-                }
-              ]
+              "title": "Commit Message",
+              "value": "${{ github.event.head_commit.message }}"
             }
           ]
+        }
+      ]
 ```
 
 成功時だけ飛ばしているのは失敗時にはメールが来るようになっているので。
 
 ## TODO
 
-* diaryを別ブランチにする
+- diary を別ブランチにする
 
 # 感想
 
-Travis CIのように環境に対して記述していく感じではないので、若干戸惑いがあるが、他人が作ったActionsを使えたりするのは便利。本当はbuildとdeployは別にしたいのだけど、ディレクトリごとキャッシュする方法がよくわからなかったのでまとめてしまった。あとyamlがつらい。他のやつも順次乗り換えて行きたい。
+Travis CI のように環境に対して記述していく感じではないので、若干戸惑いがあるが、他人が作った Actions を使えたりするのは便利。本当は build と deploy は別にしたいのだけど、ディレクトリごとキャッシュする方法がよくわからなかったのでまとめてしまった。あと yaml がつらい。 他のやつも順次乗り換えて行きたい。
