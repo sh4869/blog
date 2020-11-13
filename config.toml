@@ -8,6 +8,7 @@ hasCJKLanguage = true
 pygmentsUseClasses = true
 summaryLength = 200
 disqusShortname = "blog-sh4869-net"
+enableGitInfo = true
 
 [markup]
   defaultMarkdownHandler = "blackfriday"
@@ -19,9 +20,9 @@ disqusShortname = "blog-sh4869-net"
   baseName = "feed"
 
 [params]
-custom_css = ["css/custom.css"]
 description = "@sh4869 tech blog"
 icon = "/images/blog-icon.png"
+repo = "https://github.com/sh4869/blog"
 
 [[menu.main]]
 name = "About"
