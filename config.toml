@@ -20,7 +20,7 @@ enableGitInfo = true
   baseName = "feed"
 
 [params]
-description = "@sh4869 tech blog"
+description = "@sh4869 tech blog | 猩々緋報"
 icon = "/images/blog-icon.png"
 repo = "https://github.com/sh4869/blog"
 
@@ -28,4 +28,9 @@ repo = "https://github.com/sh4869/blog"
 name = "About"
 url = "http://sh4869.net"
 weight = 3
+
+[[menu.main]]
+name = "RSS"
+url = "https://blog.sh4869.net/feed.xml"
+weight = 4
 
