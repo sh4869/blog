@@ -26,11 +26,11 @@ repo = "https://github.com/sh4869/blog"
 
 [[menu.main]]
 name = "About"
-url = "http://sh4869.net"
+url = "http://sh4869.sh"
 weight = 3
 
 [[menu.main]]
 name = "RSS"
-url = "https://blog.sh4869.net/feed.xml"
+url = "https://blog.sh4869.sh/feed.xml"
 weight = 4
 
