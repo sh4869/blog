@@ -49,7 +49,9 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [master]
+    branches: 
+      - diary
+      - master
 
 env:
   CARGO_TERM_COLOR: always
@@ -153,7 +155,7 @@ Firebase deploy は firebase-action を使う。deploy するときに KEY が�
 
 <a href="https://spinners.work/posts/github-actions-context/" class="embedly-card">Github Actions から Slack へ通知するのを良い感じにしたい | Spinners Inc.</a>
 
-いくつか候補があったけれど、上の記事のが良さげだったので使わせてもらった。GitHub Actionsn の明確な利点は他人が作った Actions を使えることである。
+いくつか候補があったけれど、上の記事のが良さげだったので使わせてもらった。GitHub Actions の明確な利点は他人が作った Actions を使えることである。
 
 ```yml
 - name: Slack Notification
@@ -179,12 +181,20 @@ Firebase deploy は firebase-action を使う。deploy するときに KEY が�
       ]
 ```
 
-成功時だけ飛ばしているのは失敗時にはメールが来るようになっているので。
+失敗時にはGitHub Actions側からメールが来るようになっているため、成功時にだけSlackに通知が飛ぶようにしてある。
 
-## TODO
+### 備考
 
-- diary を別ブランチにする
+```yaml
+on:
+  push:
+    branches:
+      - 'diary'
+      - 'master'
+```
+
+ここで`diary`, `master`どちらも指定している。masterはプログラムがあるブランチ、diaryは日記本体があるブランチ。どちらのブランチにも `.github/workflows` を置かないと動かないので気を付けること。
 
 # 感想
 
-Travis CI のように環境に対して記述していく感じではないので、若干戸惑いがあるが、他人が作った Actions を使えたりするのは便利。本当は build と deploy は別にしたいのだけど、ディレクトリごとキャッシュする方法がよくわからなかったのでまとめてしまった。あと yaml がつらい。 他のやつも順次乗り換えて行きたい。
+Travis CI のように環境に対して記述していく感じではないので、若干戸惑いがあるが、他人が作った Actions を使えたりするのは便利。本当は build と deploy は別にしたいのだけど、ディレクトリごとキャッシュする方法がよくわからなかったのでまとめてしまった。あと yaml がつらい。他のやつも順次乗り換えて行きたい。
