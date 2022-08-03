@@ -21,4 +21,16 @@ addSbtPlugin("com.typesafe.play" % "sbt-twirl" % "1.6.0-M6")
 "com.typesafe.play" % "twirl-api_3" % "1.6.0-M6"
 ```
 
+あとはドキュメントに書いてあるとおり、使いたいプロジェクトで
+
+```
+enablePlugins(SbtTwirl)
+```
+
+を指定する。
+
 これでちゃんと動く。Scala3用のバージョンは1.6.0以降でないと存在しないので、そこは注意。
+
+使い方に関しては、比較的古い記事だが以下の記事を読み替えていけば問題なく動く。
+
+<a href="https://kazuhira-r.hatenablog.com/entry/20140920/1411223858" class="embedly-card">テンプレートエンジンTwirlを試してみる - CLOVER🍀</a>
